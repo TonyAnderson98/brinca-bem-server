@@ -18,6 +18,14 @@ class UsersRepository {
         const { rows } = await pool.query(query, [name, email, passwordHash]);
         return rows[0];
     }
+
+    async findAll(){
+        const query = `SELECT id, name, email, role FROM users ORDER BY id`;
+
+        const { rows } = await pool.query(query);
+
+        return rows;
+    }
 }
 
 export const usersRepository = new UsersRepository();
