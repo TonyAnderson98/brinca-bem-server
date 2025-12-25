@@ -1,16 +1,17 @@
 ---
-name: Custom issue template
-about: Describe this issue template's purpose here.
-title: 'feat: '
+name: Template issue Brinca Bem
+about: Templete de issue Brinca Bem
+title: "feat: "
 labels: enhancement
 assignees: TonyAnderson98
-
 ---
 
 # Objetivo
 
 # Tarefas
-- [ ] 
+
+-   [ ]
 
 # Critérios de aceitação
-- [ ]
+
+-   [ ]
