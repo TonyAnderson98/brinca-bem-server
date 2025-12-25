@@ -36,3 +36,13 @@ export function ensureAuthenticated(req, res, next){
 }
 
 
+export function ensureAdmin(req, res, next) {
+    const { role } = req.user;
+
+    if (role !== 'admin') {
+        throw new AppError('Access denied: Admins only', 403)
+    }
+
+    return next();
+}
+

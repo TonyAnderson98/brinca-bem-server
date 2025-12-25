@@ -17,3 +17,12 @@ export async function register(req, res, next){
         next(error);
     }
 }
+
+export async function index(req, res, next) {
+    try {
+        const users = await userService.listUsers();
+        return res.json(users);
+    } catch (error) {
+        next(error)
+    }
+}

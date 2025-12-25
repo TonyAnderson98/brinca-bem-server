@@ -17,6 +17,11 @@ class UserService {
 
         return user;
     }
+
+    async listUsers() {
+        const users = await usersRepository.findAll();
+        return users;
+    }
 }
 
 export const userService = new UserService();
