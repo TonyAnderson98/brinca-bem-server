@@ -8,10 +8,9 @@ assignees: TonyAnderson98
 
 # Objetivo
 
-# Tarefas
 
+# Tarefas
 -   [ ]
 
 # Critérios de aceitação
-
 -   [ ]
