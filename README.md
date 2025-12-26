@@ -19,6 +19,20 @@ O sistema permite que usuários se cadastrem, publiquem brinquedos para doação
 
 Confira a [Referência da API](./docs/API.md).
 
+### Estrutura de Pastas
+```
+src
+├── config         # Configurações de ambiente e banco de dados
+├── controllers    # Camada de Apresentação (Req/Res)
+├── middlewares    # Interceptadores (Auth, Logs, Erros)
+├── repositories   # Camada de Acesso a Dados (SQL)
+├── routes         # Definição das rotas e endpoints
+├── services       # Regras de Negócio
+├── utils          # Funções auxiliares e classes de Erro
+├── app.js         # Configuração do App Express
+└── server.js      # Entry point e inicialização do servidor
+```
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
