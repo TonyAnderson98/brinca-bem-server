@@ -17,6 +17,8 @@ O sistema permite que usuários se cadastrem, publiquem brinquedos para doação
 
 ---
 
+Confira a [Referência da API](./docs/API.md).
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
