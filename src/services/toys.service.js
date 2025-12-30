@@ -20,6 +20,12 @@ class ToysService {
 
         return toy;
     }
+
+    async listAvailabel() {
+        const toys = await toysRepository.findByStatus("available");
+
+        return toys;
+    }
 }
 
 export const toysService = new ToysService();
