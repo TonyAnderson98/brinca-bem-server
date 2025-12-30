@@ -24,3 +24,13 @@ export async function create(req, res, next) {
         next(error);
     }
 }
+
+export async function index(req, res, next) {
+    try {
+        const toys = await toysService.listAvailabel();
+
+        return res.status(200).json(toys);
+    } catch (error) {
+        next(error);
+    }
+}

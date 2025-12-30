@@ -33,6 +33,25 @@ class ToysRepository {
         const { rows } = await pool.query(query, values);
         return rows[0];
     }
+
+    async findByStatus(status) {
+        const query = `
+            SELECT
+                id,
+                title,
+                description,
+                category,
+                condition,
+                status,
+                image_url
+            FROM toys
+            WHERE status = $1
+            ORDER BY created_at DESC
+        `;
+
+        const { rows } = await pool.query(query, [status]);
+        return rows;
+    }
 }
 
 export const toysRepository = new ToysRepository();
