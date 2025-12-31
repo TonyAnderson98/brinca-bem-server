@@ -34,3 +34,25 @@ export async function index(req, res, next) {
         next(error);
     }
 }
+
+export async function showPending(req, res, next) {
+    try {
+        const toys = await toysService.showPending();
+
+        return res.status(200).json(toys);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function approve(req, res, next) {
+    try {
+        const { id } = req.params;
+
+        const toy = await toysService.approve({ id });
+
+        return res.status(200).json(toy);
+    } catch (error) {
+        next(error);
+    }
+}
