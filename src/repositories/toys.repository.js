@@ -52,6 +52,18 @@ class ToysRepository {
         const { rows } = await pool.query(query, [status]);
         return rows;
     }
+
+    async updateStatus({ toyId, status }) {
+        const query = `
+            UPDATE toys
+            SET status = $1
+            WHERE id = $2
+            RETURNING *`;
+
+        const { rows } = await pool.query(query, [status, toyId]);
+
+        return rows[0];
+    }
 }
 
 export const toysRepository = new ToysRepository();
