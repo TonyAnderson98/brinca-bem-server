@@ -56,3 +56,15 @@ export async function approve(req, res, next) {
         next(error);
     }
 }
+
+export async function myToys(req, res, next) {
+    try {
+        const userId = req.user.id; // Injetado pelo middleware de autenticação
+
+        const toys = await toysService.myToys(userId);
+
+        return res.status(200).json(toys);
+    } catch (error) {
+        next(error);
+    }
+}

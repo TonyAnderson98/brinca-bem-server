@@ -4,6 +4,7 @@ import {
     showPending,
     create,
     index,
+    myToys,
 } from "../controllers/toys.controller.js";
 import {
     ensureAdmin,
@@ -17,6 +18,7 @@ router.get("/", index);
 
 // Rotas USER
 router.post("/", ensureAuthenticated, create);
+router.get("/my-toys", ensureAuthenticated, myToys);
 
 // Rotodas ADMIN
 router.get("/pending", ensureAuthenticated, ensureAdmin, showPending);
