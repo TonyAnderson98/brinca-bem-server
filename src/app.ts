@@ -29,7 +29,15 @@ app.use("/users", usersRoutes);
 app.use("/auth", authRoutes);
 app.use("/toys", toysRoutes);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerFile, {
+        customCssUrl: CSS_URL,
+        customJs: JS_URL,
+        customSiteTitle: "Brinca Bem API Docs"
+    })
+);
 
 // Health Check
 app.get("/health", (req, res) => {
