@@ -1,11 +1,17 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import { createRequire } from "module";
 
 import usersRoutes from "./routes/users.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import toysRoutes from "./routes/toys.routes.js";
 
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+
+
+const require = createRequire(import.meta.url);
+const swaggerFile = require("./swagger-output.json");
 
 const app = express();
 
@@ -15,6 +21,8 @@ app.use(cors());
 app.use("/users", usersRoutes);
 app.use("/auth", authRoutes);
 app.use("/toys", toysRoutes);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Health Check
 app.get("/health", (req, res) => {
