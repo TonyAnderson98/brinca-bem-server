@@ -14,14 +14,43 @@ import {
 const router = Router();
 
 // Rotas públicas
-router.get("/", index);
+router.get("/",
+    /* #swagger.tags = ['Toys']
+       #swagger.description = 'Lista todos os brinquedos disponíveis'
+    */
+    index);
 
 // Rotas USER
-router.post("/", ensureAuthenticated, create);
-router.get("/my-toys", ensureAuthenticated, myToys);
+router.post("/", ensureAuthenticated,
+    /* #swagger.tags = ['Toys']
+       #swagger.security = [{ "bearerAuth": [] }] 
+       #swagger.description = 'Cadastra um novo brinquedo'
+       #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados do brinquedo',
+            schema: { $ref: '#/definitions/AddToy' }
+       }
+    */
+    create);
+router.get("/my-toys", ensureAuthenticated,
+    /* #swagger.tags = ['Toys']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Lista os brinquedos do usuário logado'
+    */
+    myToys);
 
 // Rotodas ADMIN
-router.get("/pending", ensureAuthenticated, ensureAdmin, showPending);
-router.patch("/:id/approve", ensureAuthenticated, ensureAdmin, approve);
+router.get("/pending", ensureAuthenticated, ensureAdmin,
+    /* #swagger.tags = ['Admin']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Lista brinquedos aguardando aprovação (Admin)'
+    */
+    showPending);
+router.patch("/:id/approve", ensureAuthenticated, ensureAdmin,
+    /* #swagger.tags = ['Admin']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Aprova um brinquedo pendente'
+    */
+    approve);
 
 export default router;

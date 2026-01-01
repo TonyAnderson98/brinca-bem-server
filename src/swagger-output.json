@@ -1,0 +1,276 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Brinca Bem API",
+    "description": "API para doação de brinquedos",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3333",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Autentica o usuário e retorna o Token JWT",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Credenciais de acesso",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/toys/": {
+      "get": {
+        "tags": [
+          "Toys"
+        ],
+        "description": "Lista todos os brinquedos disponíveis",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Toys"
+        ],
+        "description": "Cadastra um novo brinquedo",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do brinquedo",
+            "schema": {
+              "$ref": "#/definitions/AddToy"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/toys/my-toys": {
+      "get": {
+        "tags": [
+          "Toys"
+        ],
+        "description": "Lista os brinquedos do usuário logado",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/toys/pending": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Lista brinquedos aguardando aprovação (Admin)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/toys/{id}/approve": {
+      "patch": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Aprova um brinquedo pendente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "123"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "AddToy": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Boneco Buzz Lightyear"
+        },
+        "description": {
+          "type": "string",
+          "example": "Usado, mas em bom estado"
+        },
+        "category": {
+          "type": "string",
+          "example": "Bonecos"
+        },
+        "condition": {
+          "type": "string",
+          "example": "used"
+        },
+        "image_url": {
+          "type": "string",
+          "example": "http://img.com/foto.jpg"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "category",
+        "condition",
+        "image_url"
+      ]
+    }
+  }
+}
