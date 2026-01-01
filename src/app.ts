@@ -18,6 +18,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// --- VERCEL USAR CDN PARA UI DO SWAGGER ---
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
+const JS_URL = [
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-bundle.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-standalone-preset.js",
+];
+
 app.use("/users", usersRoutes);
 app.use("/auth", authRoutes);
 app.use("/toys", toysRoutes);
