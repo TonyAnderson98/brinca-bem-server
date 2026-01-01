@@ -1,9 +1,17 @@
-import jwt, { decode } from 'jsonwebtoken';
-import {AppError} from '../utils/AppError.js'
-import {env} from '../config/env.js'
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { AppError } from '../utils/AppError.js'
+import { env } from '../config/env.js'
+
+interface TokenPayload {
+    id: number;
+    role: 'user' | 'admin';
+    iat: number;
+    exp: number;
+}
 
 
-export function ensureAuthenticated(req, res, next){
+export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
 
     // Verifica se o Header existe
@@ -16,7 +24,7 @@ export function ensureAuthenticated(req, res, next){
 
     try {
         // Verifica a assinatura do token
-        const decoded = jwt.verify(token, env.jwt.secret);
+        const decoded = jwt.verify(token, env.jwt.secret) as unknown as TokenPayload;
 
         // Injeta os dados do usuário na requisição (req.user) para
         // ficarem disponíveis para os controllers
@@ -26,8 +34,6 @@ export function ensureAuthenticated(req, res, next){
         }
 
         return next();
-
-
     } catch (error) {
         throw new AppError('Invalid token', 401)
     }
@@ -36,10 +42,9 @@ export function ensureAuthenticated(req, res, next){
 }
 
 
-export function ensureAdmin(req, res, next) {
-    const { role } = req.user;
+export function ensureAdmin(req: Request, res: Response, next: NextFunction) {
 
-    if (role !== 'admin') {
+    if (req.user?.role !== 'admin') {
         throw new AppError('Access denied: Admins only', 403)
     }
 

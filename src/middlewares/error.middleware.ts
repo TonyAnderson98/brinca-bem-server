@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/AppError.js';
 
-export function errorMiddleware(error, req, res, next) {
+export function errorMiddleware(error: Error, req: Request, res: Response, next: NextFunction) {
     // Erro controlado (ufa!) 
     if (error instanceof AppError) {
         return res.status(error.statusCode).json({
