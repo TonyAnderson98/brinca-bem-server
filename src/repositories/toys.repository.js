@@ -64,6 +64,25 @@ class ToysRepository {
 
         return rows[0];
     }
+
+    async myToys(userId) {
+        const query = `
+            SELECT 
+                id,
+                title,
+                description,
+                category,
+                condition,
+                status,
+                image_url
+            FROM toys
+            WHERE user_id = $1
+        `;
+
+        const { rows } = await pool.query(query, [userId]);
+
+        return rows;
+    }
 }
 
 export const toysRepository = new ToysRepository();

@@ -49,6 +49,12 @@ class ToysService {
 
         return toy;
     }
+
+    async myToys(userId) {
+        const toys = await toysRepository.myToys(userId);
+
+        return toys;
+    }
 }
 
 export const toysService = new ToysService();
