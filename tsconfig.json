@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Configurações de Compilação */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    
+    /* Strictness */
+    "strict": true,
+    "noImplicitAny": true,
+    
+    /* Qualidade de Código e Debug */
+    "removeComments": true,           /* Remove comentários do build final  */
+    "sourceMap": true,                /* Cria mapas para facilitar o debug apontando para o .ts */
+    
+    /* Interoperabilidade */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

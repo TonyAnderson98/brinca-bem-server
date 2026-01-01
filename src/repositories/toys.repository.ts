@@ -1,4 +1,15 @@
-import pool from "../config/database.js";
+import pool from '../config/database.js';
+import { Toy } from '../types/index.js'
+
+// DTO para criação
+interface CreateToyDTO {
+    title: string,
+    description: string;
+    category: string;
+    condition: 'new' | 'used';
+    imageUrl: string;
+    userId: number;
+}
 
 class ToysRepository {
     async create({
@@ -8,7 +19,7 @@ class ToysRepository {
         condition,
         imageUrl,
         userId,
-    }) {
+    }: CreateToyDTO): Promise<Toy> {
         const query = `
             INSERT INTO toys (
                 title,
@@ -30,11 +41,11 @@ class ToysRepository {
             userId,
         ];
 
-        const { rows } = await pool.query(query, values);
+        const { rows } = await pool.query<Toy>(query, values);
         return rows[0];
     }
 
-    async findByStatus(status) {
+    async findByStatus(status: string): Promise<Toy[]> {
         const query = `
             SELECT
                 id,
@@ -49,23 +60,23 @@ class ToysRepository {
             ORDER BY created_at DESC
         `;
 
-        const { rows } = await pool.query(query, [status]);
+        const { rows } = await pool.query<Toy>(query, [status]);
         return rows;
     }
 
-    async updateStatus({ toyId, status }) {
+    async updateStatus({ toyId, status }: { toyId: number; status: string }): Promise<Toy | undefined> {
         const query = `
             UPDATE toys
             SET status = $1
             WHERE id = $2
             RETURNING *`;
 
-        const { rows } = await pool.query(query, [status, toyId]);
+        const { rows } = await pool.query<Toy>(query, [status, toyId]);
 
         return rows[0];
     }
 
-    async myToys(userId) {
+    async myToys(userId: number): Promise<Toy[]> {
         const query = `
             SELECT 
                 id,
@@ -79,7 +90,7 @@ class ToysRepository {
             WHERE user_id = $1
         `;
 
-        const { rows } = await pool.query(query, [userId]);
+        const { rows } = await pool.query<Toy>(query, [userId]);
 
         return rows;
     }

@@ -6,7 +6,7 @@ import pool from './config/database.js';
 async function start() {
     try {
         await pool.query('SELECT 1'); // Ping no banco
-        
+
         app.listen(env.port, () => {
             console.log(`🚀 Server running on port ${env.port}`);
         });

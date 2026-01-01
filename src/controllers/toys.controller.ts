@@ -1,10 +1,11 @@
+import { Request, Response, NextFunction } from 'express';
 import { toysService } from "../services/toys.service.js";
 import { AppError } from "../utils/AppError.js";
 
-export async function create(req, res, next) {
+export async function create(req: Request, res: Response, next: NextFunction) {
     try {
         const { title, description, category, condition, image_url } = req.body;
-        const userId = req.user.id; // Injetado pelo middleware de autenticação
+        const userId = req.user!.id; // Injetado pelo middleware de autenticação
 
         if (!title || !description || !category || !condition || !image_url) {
             throw new AppError("All fields are required", 400);
@@ -25,7 +26,7 @@ export async function create(req, res, next) {
     }
 }
 
-export async function index(req, res, next) {
+export async function index(req: Request, res: Response, next: NextFunction) {
     try {
         const toys = await toysService.listAvailabel();
 
@@ -35,7 +36,7 @@ export async function index(req, res, next) {
     }
 }
 
-export async function showPending(req, res, next) {
+export async function showPending(req: Request, res: Response, next: NextFunction) {
     try {
         const toys = await toysService.showPending();
 
@@ -45,11 +46,11 @@ export async function showPending(req, res, next) {
     }
 }
 
-export async function approve(req, res, next) {
+export async function approve(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
 
-        const toy = await toysService.approve({ id });
+        const toy = await toysService.approve({ toyId: Number(id) });
 
         return res.status(200).json(toy);
     } catch (error) {
@@ -57,9 +58,9 @@ export async function approve(req, res, next) {
     }
 }
 
-export async function myToys(req, res, next) {
+export async function myToys(req: Request, res: Response, next: NextFunction) {
     try {
-        const userId = req.user.id; // Injetado pelo middleware de autenticação
+        const userId = req.user!.id; // Injetado pelo middleware de autenticação
 
         const toys = await toysService.myToys(userId);
 

@@ -1,4 +1,15 @@
 import { toysRepository } from "../repositories/toys.repository.js";
+import { Toy } from "../types/index.js";
+import { AppError } from "../utils/AppError.js";
+
+interface CreateToyServiceDTO {
+    title: string;
+    description: string;
+    category: string;
+    condition: 'new' | 'used';
+    imageUrl: string;
+    userId: number;
+}
 
 class ToysService {
     async create({
@@ -8,7 +19,7 @@ class ToysService {
         condition,
         imageUrl,
         userId,
-    }) {
+    }: CreateToyServiceDTO): Promise<Toy> {
         const toy = await toysRepository.create({
             title,
             description,
@@ -21,22 +32,19 @@ class ToysService {
         return toy;
     }
 
-    async listAvailabel() {
+    async listAvailabel(): Promise<Toy[]> {
         const toys = await toysRepository.findByStatus("available");
 
         return toys;
     }
 
-    async showPending() {
+    async showPending(): Promise<Toy[]> {
         const toys = await toysRepository.findByStatus("pending");
 
         return toys;
     }
 
-    async approve({ toyId }) {
-        if (!toyId) {
-            throw new AppError("Toy ID is required");
-        }
+    async approve({ toyId }: { toyId: number }): Promise<Toy> {
 
         const toy = await toysRepository.updateStatus({
             toyId,
@@ -44,13 +52,13 @@ class ToysService {
         });
 
         if (!toy) {
-            throw new AppError("Toy not found", 404);
+            throw new AppError("Failed to create toy", 500)
         }
 
         return toy;
     }
 
-    async myToys(userId) {
+    async myToys(userId: number): Promise<Toy[]> {
         const toys = await toysRepository.myToys(userId);
 
         return toys;
