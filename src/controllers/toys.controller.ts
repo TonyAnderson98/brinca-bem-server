@@ -4,19 +4,24 @@ import { AppError } from "../utils/AppError.js";
 
 export async function create(req: Request, res: Response, next: NextFunction) {
     try {
-        const { title, description, category, condition, image_url } = req.body;
+        const { title, description, category, condition, images } = req.body;
         const userId = req.user!.id; // Injetado pelo middleware de autenticação
 
-        if (!title || !description || !category || !condition || !image_url) {
+        if (!title || !description || !category || !condition || !images || images.length === 0) {
             throw new AppError("All fields are required", 400);
         }
+
+        const coverImage = images[0];
+        const galleryImages = images.slice(1);
+
 
         const toy = await toysService.create({
             title,
             description,
             category,
             condition,
-            imageUrl: image_url,
+            imageUrl: coverImage,
+            gallery: galleryImages,
             userId,
         });
 

@@ -3,11 +3,12 @@ import { Toy } from '../types/index.js'
 
 // DTO para criação
 interface CreateToyDTO {
-    title: string,
+    title: string;
     description: string;
     category: string;
     condition: 'new' | 'used';
-    imageUrl: string;
+    imageUrl: string; // capa
+    gallery: string[]; // outras imagens
     userId: number;
 }
 
@@ -18,31 +19,62 @@ class ToysRepository {
         category,
         condition,
         imageUrl,
+        gallery,
         userId,
     }: CreateToyDTO): Promise<Toy> {
-        const query = `
-            INSERT INTO toys (
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            // Inserir a capa
+            const queryToy = `
+                INSERT INTO toys (
+                    title,
+                    description,
+                    category,
+                    condition,
+                    image_url,
+                    user_id)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING * 
+            `;
+
+            const valuesToy = [
                 title,
                 description,
                 category,
                 condition,
-                image_url,
-                user_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING * 
-        `;
+                imageUrl,
+                userId,
+            ];
 
-        const values = [
-            title,
-            description,
-            category,
-            condition,
-            imageUrl,
-            userId,
-        ];
+            const { rows: toyRows } = await client.query<Toy>(queryToy, valuesToy);
+            const toy = toyRows[0];
 
-        const { rows } = await pool.query<Toy>(query, values);
-        return rows[0];
+
+            // Inserir demais imagens (se houver)
+            if (gallery && gallery.length > 0) {
+                const queryGallery = `
+                    INSERT INTO toys_gallery (toy_id, image_url)
+                    VALUES ($1, $2)
+                `;
+
+                for (const url of gallery) {
+                    await client.query(queryGallery, [toy.id, url]);
+                }
+            }
+
+            await client.query('COMMIT');
+
+            // Retorna o objeto completo
+            return { ...toy, gallery };
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 
     async findByStatus(status: string): Promise<Toy[]> {
@@ -78,9 +110,25 @@ class ToysRepository {
             WHERE id = $1
         `;
 
-        const { rows } = await pool.query<Toy>(query, [id]);
+        const { rows: toyRows } = await pool.query<Toy>(query, [id]);
 
-        return rows[0];
+        // Busca a galeria separadamente
+        const queryGallery = `
+            SELECT image_url
+            FROM toys_gallery
+            WHERE toy_id = $1`;
+
+        const { rows: galleryRows } = await pool.query<{ image_url: string }>(queryGallery, [id]);
+
+        const toy = toyRows[0];
+
+        toy.gallery = galleryRows.map(row => row.image_url);
+
+        return toy;
+
+
+
+
     }
 
     async updateStatus({ toyId, status }: { toyId: number; status: string }): Promise<Toy | undefined> {

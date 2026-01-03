@@ -17,4 +17,5 @@ export interface Toy {
     image_url: string;
     user_id: number;
     created_at: Date;
+    gallery?: string[];
 }
