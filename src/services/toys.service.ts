@@ -38,6 +38,22 @@ class ToysService {
         return toys;
     }
 
+    async findById(id: number): Promise<Toy | undefined> {
+        const toy = await toysRepository.findById(id);
+
+        // Rota pública deve retornar somente se o brinquedo for disponível
+        // Não avisaremos ao front end que o recurso existe
+
+        // Futuramente os admins usarão este mesmo método para buscar um brinquedo, mas eles também receberão
+        // 404 Not Found. Vou estuadar se é viável usar o 'user.role' para retornar ou não um brinquedo 'pending' ou 'donated'
+
+        if (toy?.status !== 'available') {
+            throw new AppError("Este brinquedo não foi encontrado", 404)
+        }
+
+        return toy;
+    }
+
     async showPending(): Promise<Toy[]> {
         const toys = await toysRepository.findByStatus("pending");
 
