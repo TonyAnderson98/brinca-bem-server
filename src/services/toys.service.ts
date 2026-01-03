@@ -8,6 +8,7 @@ interface CreateToyServiceDTO {
     category: string;
     condition: 'new' | 'used';
     imageUrl: string;
+    gallery: string[];
     userId: number;
 }
 
@@ -18,6 +19,7 @@ class ToysService {
         category,
         condition,
         imageUrl,
+        gallery,
         userId,
     }: CreateToyServiceDTO): Promise<Toy> {
         const toy = await toysRepository.create({
@@ -26,6 +28,7 @@ class ToysService {
             category,
             condition,
             imageUrl,
+            gallery,
             userId,
         });
 
