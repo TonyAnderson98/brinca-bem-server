@@ -64,6 +64,25 @@ class ToysRepository {
         return rows;
     }
 
+    async findById(id: number): Promise<Toy | undefined> {
+        const query = `
+            SELECT
+                id,
+                title,
+                description,
+                category,
+                condition,
+                status,
+                image_url
+            FROM toys
+            WHERE id = $1
+        `;
+
+        const { rows } = await pool.query<Toy>(query, [id]);
+
+        return rows[0];
+    }
+
     async updateStatus({ toyId, status }: { toyId: number; status: string }): Promise<Toy | undefined> {
         const query = `
             UPDATE toys
@@ -94,6 +113,7 @@ class ToysRepository {
 
         return rows;
     }
+
 }
 
 export const toysRepository = new ToysRepository();

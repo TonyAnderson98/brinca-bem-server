@@ -5,6 +5,7 @@ import {
     create,
     index,
     myToys,
+    findById,
 } from "../controllers/toys.controller.js";
 import {
     ensureAdmin,
@@ -19,6 +20,12 @@ router.get("/",
        #swagger.description = 'Lista todos os brinquedos disponíveis'
     */
     index);
+
+router.get("/:id",
+    /* #swagger.tags = ['Toys]
+       #swagger.description = 'Busca um brinquedo público pelo ID'
+    */
+    findById);
 
 // Rotas USER
 router.post("/", ensureAuthenticated,
@@ -46,6 +53,7 @@ router.get("/pending", ensureAuthenticated, ensureAdmin,
        #swagger.description = 'Lista brinquedos aguardando aprovação (Admin)'
     */
     showPending);
+
 router.patch("/:id/approve", ensureAuthenticated, ensureAdmin,
     /* #swagger.tags = ['Admin']
        #swagger.security = [{ "bearerAuth": [] }]

@@ -46,6 +46,23 @@ export async function showPending(req: Request, res: Response, next: NextFunctio
     }
 }
 
+export async function findById(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            throw new AppError("Toy ID are missing", 400)
+        }
+
+        const toy = await toysService.findById(Number(id));
+
+        return res.status(200).json(toy);
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export async function approve(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
