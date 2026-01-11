@@ -20,8 +20,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
             description,
             category,
             condition,
-            imageUrl: coverImage,
-            gallery: galleryImages,
+            images,
             userId,
         });
 
