@@ -14,8 +14,7 @@ export interface Toy {
     category: string;
     condition: 'new' | 'used';
     status: 'pending' | 'available' | 'donated';
-    image_url: string;
+    images: string[];
     user_id: number;
     created_at: Date;
-    gallery?: string[];
 }

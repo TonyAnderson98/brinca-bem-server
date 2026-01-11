@@ -14,12 +14,29 @@ import {
 
 const router = Router();
 
-// Rotas públicas
+// Listar todos públicos (HOME)
 router.get("/",
     /* #swagger.tags = ['Toys']
        #swagger.description = 'Lista todos os brinquedos disponíveis'
     */
     index);
+
+// Listar pendentes (Admin)
+router.get("/pending", ensureAuthenticated, ensureAdmin,
+    /* #swagger.tags = ['Admin']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Lista brinquedos aguardando aprovação (Admin)'
+    */
+    showPending);
+
+// Listar meus brinquedos (User)
+router.get("/my-toys", ensureAuthenticated,
+    /* #swagger.tags = ['Toys']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Lista os brinquedos do usuário logado'
+    */
+    myToys);
+
 
 router.get("/:id",
     /* #swagger.tags = ['Toys]
@@ -27,7 +44,14 @@ router.get("/:id",
     */
     findById);
 
-// Rotas USER
+
+router.patch("/:id/approve", ensureAuthenticated, ensureAdmin,
+    /* #swagger.tags = ['Admin']
+       #swagger.security = [{ "bearerAuth": [] }]
+       #swagger.description = 'Aprova um brinquedo pendente'
+    */
+    approve);
+
 router.post("/", ensureAuthenticated,
     /* #swagger.tags = ['Toys']
        #swagger.security = [{ "bearerAuth": [] }] 
@@ -39,26 +63,5 @@ router.post("/", ensureAuthenticated,
        }
     */
     create);
-router.get("/my-toys", ensureAuthenticated,
-    /* #swagger.tags = ['Toys']
-       #swagger.security = [{ "bearerAuth": [] }]
-       #swagger.description = 'Lista os brinquedos do usuário logado'
-    */
-    myToys);
-
-// Rotodas ADMIN
-router.get("/pending", ensureAuthenticated, ensureAdmin,
-    /* #swagger.tags = ['Admin']
-       #swagger.security = [{ "bearerAuth": [] }]
-       #swagger.description = 'Lista brinquedos aguardando aprovação (Admin)'
-    */
-    showPending);
-
-router.patch("/:id/approve", ensureAuthenticated, ensureAdmin,
-    /* #swagger.tags = ['Admin']
-       #swagger.security = [{ "bearerAuth": [] }]
-       #swagger.description = 'Aprova um brinquedo pendente'
-    */
-    approve);
 
 export default router;
