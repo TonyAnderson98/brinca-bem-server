@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import { env } from './env.js';
+import logger from './logger.js';
 
 // Detecta se estamos rodando testes
 const isTest = process.env.NODE_ENV === 'test';
@@ -17,8 +18,12 @@ const pool = new Pool({
 
 pool.on('connect', () => {
     if (!isTest) {
-        console.log('✅ Database connected successfully');
+        logger.info('✅ Database connected successfully');
     }
+});
+
+pool.on('error', (err) => {
+    logger.error(`Unexpected database error: ${err.message}`);
 });
 
 export default pool;
