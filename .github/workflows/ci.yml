@@ -1,0 +1,51 @@
+name: CI - Integration Tests
+
+# Quando esse workflow deve rodar
+on:
+    push:
+        branches: [master, main]
+    pull_request:
+        branches: [master, main]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        # Postgres temporário
+        services:
+            postgres:
+                image: postgres:15
+                env:
+                    POSTGRES_USER: test_user
+                    POSTGRES_PASSWORD: test_password
+                    POSTGRES_DB: brincabem_test
+                ports:
+                    - 5432:5432
+                # Healthcheck: Garante que o banco está pronto antes de rodar os testes
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        steps:
+            - name: Baixar o código (Checkout)
+              uses: actions/checkout@v4
+
+            - name: Instalar Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Instalar dependências
+              run: npm ci
+
+            - name: Rodar Testes
+              run: npm run test
+              env:
+                  # Estas variáveis sobrescrevem .env
+                  # host é 'localhost' porque mapeamos a porta 5432 acima
+                  DATABASE_URL: postgres://test_user:test_password@localhost:5432/brincabem_test
+                  JWT_SECRET: chave_nao_tao_secreta_pois_o_banco_eh_efemero_hehe
+                  PORT: 3000
