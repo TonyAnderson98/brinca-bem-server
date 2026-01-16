@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes.js";
 import toysRoutes from "./routes/toys.routes.js";
 
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+import httpLogger from './middlewares/httpLogger.js';
 
 
 const require = createRequire(import.meta.url);
@@ -17,6 +18,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(httpLogger);
 
 // --- VERCEL USAR CDN PARA UI DO SWAGGER ---
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
