@@ -9,6 +9,7 @@ yarn-error.log*
 .env.local
 .env.development.local
 .env.test.local
+.env.test
 .env.production.local
 
 # IDEs e Editores

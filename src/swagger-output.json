@@ -140,6 +140,31 @@
         ]
       }
     },
+    "/toys/pending": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Lista brinquedos aguardando aprovação (Admin)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/toys/my-toys": {
       "get": {
         "tags": [
@@ -165,16 +190,15 @@
         ]
       }
     },
-    "/toys/pending": {
+    "/toys/{id}": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
-        "description": "Lista brinquedos aguardando aprovação (Admin)",
+        "tags": [],
+        "description": "Busca um brinquedo público pelo ID",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -182,12 +206,7 @@
           "200": {
             "description": "OK"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/toys/{id}/approve": {
@@ -245,7 +264,7 @@
       "properties": {
         "title": {
           "type": "string",
-          "example": "Boneco Buzz Lightyear"
+          "example": "Boneco do Batman"
         },
         "description": {
           "type": "string",
