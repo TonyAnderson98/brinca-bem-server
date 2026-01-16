@@ -24,7 +24,7 @@ class AuthService {
 
 
         // Verificar se a senha corresponde
-        const passwordMatch = bcrypt.compare(password, user.password_hash);
+        const passwordMatch = await bcrypt.compare(password, user.password_hash);
         if (!passwordMatch) {
             throw new AppError('Invalid credentials', 401)
         }

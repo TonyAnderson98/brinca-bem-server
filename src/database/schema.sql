@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
@@ -14,9 +14,9 @@ CREATE TABLE toys(
   description TEXT NOT NULL,
   category VARCHAR(64) NOT NULL,
   condition VARCHAR(32) NOT NULL CHECK(condition IN ('new', 'used')),
-  status VARCHAR(32) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'available', 'reserved', 'donated')),
-  image_url VARCHAR(255),
-  user_id INTEGER NOT NULL,
+  status VARCHAR(32) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'available', 'donated')),
+  images TEXT[] NOT NULL, 
+    user_id INTEGER NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
@@ -27,6 +27,3 @@ CREATE TABLE toys(
 );
 
 CREATE INDEX idx_toys_user_id ON toys(user_id);
-
-CREATE INDEX idx_toys_user_id ON toys(user_id);
-
